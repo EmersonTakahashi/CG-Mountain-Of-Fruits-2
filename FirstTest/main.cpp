@@ -6,8 +6,10 @@ GLfloat xchar = 0.0f;
 GLfloat ychar = 0.0f;
 
 float x_position = 0;
+float y_position = 0;
 int state = 1; //1: right, 2: left
 float moviment_speed = 0.15f;
+float moviment_y = 0.2f;
 
 bool fruit_was_peaked = FALSE;
 
@@ -20,29 +22,29 @@ bool game_finished = FALSE;
 void drawCharacter() {
 	// Desenha o corpo
 	glBegin(GL_QUADS);
-	glColor3f(1.0f + x_position, 0.0f, 0.0f);
-	glVertex2f(-0.1f + x_position, -0.5f);
-	glVertex2f(0.1f + x_position, -0.5f);
-	glVertex2f(0.1f + x_position, -0.7f);
-	glVertex2f(-0.1f + x_position, -0.7f);
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glVertex2f(-0.1f + x_position, -0.5f + y_position);
+	glVertex2f(0.1f + x_position, -0.5f + y_position);
+	glVertex2f(0.1f + x_position, -0.7f + y_position);
+	glVertex2f(-0.1f + x_position, -0.7f + y_position);
 	glEnd();
 
 	// Desenha a cabeça
 	glBegin(GL_QUADS);
-	glColor3f(1.0f + x_position, 0.8f, 0.6f);
-	glVertex2f(-0.15f + x_position, -0.3f);
-	glVertex2f(0.15f + x_position, -0.3f);
-	glVertex2f(0.15f + x_position, -0.5f);
-	glVertex2f(-0.15f + x_position, -0.5f);
+	glColor3f(1.0f, 0.8f, 0.6f);
+	glVertex2f(-0.15f + x_position, -0.3f + y_position);
+	glVertex2f(0.15f + x_position, -0.3f + y_position);
+	glVertex2f(0.15f + x_position, -0.5f + y_position);
+	glVertex2f(-0.15f + x_position, -0.5f + y_position);
 	glEnd();
 
 	// Desenha a arma
 	glBegin(GL_QUADS);
-	glColor3f(0.0f + x_position, 0.0f, 0.0f);
-	glVertex2f(0.15f + x_position, -0.5f);
-	glVertex2f(0.2f + x_position, -0.5f);
-	glVertex2f(0.2f + x_position, -0.6f);
-	glVertex2f(0.15f + x_position, -0.6f);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(0.15f + x_position, -0.5f + y_position);
+	glVertex2f(0.2f + x_position, -0.5f + y_position);
+	glVertex2f(0.2f + x_position, -0.6f + y_position);
+	glVertex2f(0.15f + x_position, -0.6f + y_position);
 	glEnd();
 }
 
@@ -166,16 +168,16 @@ void level1() {
 	drawCharacter();
 	glPopMatrix();
 
-	//// Desenhar Degraus moved to level 2
-	//glPushMatrix();
-	//glTranslatef(1.3f, 0.5f, 0.0f);
-	//drawStairs();
-	//glPopMatrix();
+	// Desenhar Degraus 
+	glPushMatrix();
+	glTranslatef(1.3f, 0.5f, 0.0f);
+	drawStairs();
+	glPopMatrix();
 
 	//Desenhar Fruta
 	if (!fruit_was_peaked) {
 		glPushMatrix();
-		glTranslatef(1.0f, 0, 0.0f);
+		glTranslatef(1.0f, 0.5f, 0.0f);
 		glScalef(0.3f, 0.3f, 1.0f);
 		drawFruits();
 		glPopMatrix();
@@ -228,9 +230,19 @@ void timer(int) {
 		else {
 			state = LEFT;
 		}
+
+		if (x_position > 2.5 && x_position < 2.8) {
+			y_position += moviment_y;
+		}
+		else if (x_position > 2.8 && x_position < 3.1) {
+			y_position += moviment_y;
+		}
+		else if (x_position > 3.1 && x_position < 3.4) {
+			y_position += moviment_y;
+		}
 		break;
 	case LEFT:
-		if (x_position > -0) {
+		if (x_position > 0) {
 
 			x_position -= moviment_speed;
 		}
@@ -241,6 +253,16 @@ void timer(int) {
 				break;
 			}
 			state = RIGHT;
+		}
+
+		if (x_position > 2.5 && x_position < 2.8) {
+			y_position -= moviment_y;
+		}
+		else if (x_position > 2.8 && x_position < 3.1) {
+			y_position -= moviment_y;
+		}
+		else if (x_position > 3.1 && x_position < 3.4) {
+			y_position -= moviment_y;
 		}
 		break;
 	}
